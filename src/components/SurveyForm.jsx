@@ -2,40 +2,44 @@ import { useState } from "react";
 
 const questions = [
   {
-    id: "role",
+    id: "role_or_company",
     label: "Your role or company",
     placeholder: "Enter your role or company",
-    optional: true,
   },
   {
-    id: "q1",
+    id: "answer_1",
+    questionField: "question_1",
+    questionText: "What excites you most about technology right now?",
     label: "1. What excites you most about technology right now?",
     placeholder: "Type your answer here...",
-    optional: true,
   },
   {
-    id: "q2",
+    id: "answer_2",
+    questionField: "question_2",
+    questionText: "What technology trend is overhyped?",
     label: "2. What technology trend is overhyped?",
     placeholder: "Type your answer here...",
-    optional: true,
   },
   {
-    id: "q3",
+    id: "answer_3",
+    questionField: "question_3",
+    questionText: "What leadership lesson took you the longest to learn?",
     label: "3. What leadership lesson took you the longest to learn?",
     placeholder: "Type your answer here...",
-    optional: true,
   },
   {
-    id: "q4",
+    id: "answer_4",
+    questionField: "question_4",
+    questionText: "What one capability must banks master in the next decade?",
     label: "4. What one capability must banks master in the next decade?",
     placeholder: "Type your answer here...",
-    optional: true,
   },
   {
-    id: "q5",
+    id: "answer_5",
+    questionField: "question_5",
+    questionText: "What advice would you give your younger self entering tech?",
     label: "5. What advice would you give your younger self entering tech?",
     placeholder: "Type your answer here...",
-    optional: true,
   },
 ];
 
@@ -48,12 +52,12 @@ export default function SurveyForm({ finishSurvey, setSurveyProgress }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [answers, setAnswers] = useState({
-    role: "",
-    q1: "",
-    q2: "",
-    q3: "",
-    q4: "",
-    q5: "",
+    role_or_company: "",
+    answer_1: "",
+    answer_2: "",
+    answer_3: "",
+    answer_4: "",
+    answer_5: "",
   });
 
   const currentQuestion = questions[step];
@@ -94,7 +98,19 @@ export default function SurveyForm({ finishSurvey, setSurveyProgress }) {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: encode({
           "form-name": "to-talks-survey",
-          ...answers,
+          role_or_company: answers.role_or_company,
+          question_1: "What excites you most about technology right now?",
+          answer_1: answers.answer_1,
+          question_2: "What technology trend is overhyped?",
+          answer_2: answers.answer_2,
+          question_3: "What leadership lesson took you the longest to learn?",
+          answer_3: answers.answer_3,
+          question_4:
+            "What one capability must banks master in the next decade?",
+          answer_4: answers.answer_4,
+          question_5:
+            "What advice would you give your younger self entering tech?",
+          answer_5: answers.answer_5,
         }),
       });
 
@@ -130,6 +146,14 @@ export default function SurveyForm({ finishSurvey, setSurveyProgress }) {
         className="survey-form"
       >
         <input type="hidden" name="form-name" value="to-talks-survey" />
+
+        {currentQuestion.questionField && (
+          <input
+            type="hidden"
+            name={currentQuestion.questionField}
+            value={currentQuestion.questionText}
+          />
+        )}
 
         <label className="question-label" htmlFor={currentQuestion.id}>
           {currentQuestion.label}
