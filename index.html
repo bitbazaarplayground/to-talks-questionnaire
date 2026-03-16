@@ -4,22 +4,54 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>T&O Talks Survey</title>
+    <meta
+      name="description"
+      content="T&O Talks conference survey by Santander Technology."
+    />
+    <title>T&O Talks Survey | Santander Technology</title>
   </head>
 
   <body>
-    <!-- Hidden Netlify form for detection -->
     <form name="to-talks-survey" netlify hidden>
-      <input type="text" name="role" />
-      <textarea name="q1"></textarea>
-      <textarea name="q2"></textarea>
-      <textarea name="q3"></textarea>
-      <textarea name="q4"></textarea>
-      <textarea name="q5"></textarea>
+      <input type="text" name="role_or_company" />
+
+      <input
+        type="text"
+        name="question_1"
+        value="What excites you most about technology right now?"
+      />
+      <textarea name="answer_1"></textarea>
+
+      <input
+        type="text"
+        name="question_2"
+        value="What technology trend is overhyped?"
+      />
+      <textarea name="answer_2"></textarea>
+
+      <input
+        type="text"
+        name="question_3"
+        value="What leadership lesson took you the longest to learn?"
+      />
+      <textarea name="answer_3"></textarea>
+
+      <input
+        type="text"
+        name="question_4"
+        value="What one capability must banks master in the next decade?"
+      />
+      <textarea name="answer_4"></textarea>
+
+      <input
+        type="text"
+        name="question_5"
+        value="What advice would you give your younger self entering tech?"
+      />
+      <textarea name="answer_5"></textarea>
     </form>
 
     <div id="root"></div>
-
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
