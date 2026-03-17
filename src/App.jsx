@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+
 import SplashScreen from "./components/SplashScreen";
 import SurveyForm from "./components/SurveyForm";
 import ThankYou from "./components/ThankYou";
+import DisplayPage from "./pages/DisplayPage";
 
-export default function App() {
+function QuestionnaireFlow() {
   const [screen, setScreen] = useState("splash");
   const [progress, setProgress] = useState(0);
 
@@ -35,5 +38,14 @@ export default function App() {
 
       {screen === "thankyou" && <ThankYou />}
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<QuestionnaireFlow />} />
+      <Route path="/displaypage" element={<DisplayPage />} />
+    </Routes>
   );
 }
