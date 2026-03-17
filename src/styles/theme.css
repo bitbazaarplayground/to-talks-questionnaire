@@ -1,4 +1,4 @@
-:root {
+theme.css :root {
   --santander-red: #ec0000;
   --santander-red-dark: #c40000;
   --dark: #111827;
@@ -241,5 +241,149 @@ body {
 
   .button-row {
     flex-direction: column;
+  }
+}
+.display-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ec0000 0%, #8f0000 100%);
+  overflow: hidden;
+}
+
+.display-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(420px, 0.95fr) 1.05fr;
+}
+
+.display-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 4vw, 56px);
+  position: relative;
+}
+
+.glass-panel {
+  width: min(100%, 760px);
+  padding: clamp(24px, 3vw, 42px);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+  color: white;
+}
+
+.display-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.display-title {
+  font-size: clamp(2.5rem, 5vw, 4.8rem);
+  line-height: 0.95;
+  font-weight: 800;
+  margin-bottom: 16px;
+  max-width: 8ch;
+}
+
+.display-subtitle {
+  font-size: clamp(1rem, 1.4vw, 1.3rem);
+  line-height: 1.6;
+  margin-bottom: 26px;
+  max-width: 56ch;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.qr-card {
+  width: clamp(220px, 22vw, 340px);
+  background: white;
+  border-radius: 28px;
+  padding: 18px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+  margin-bottom: 28px;
+}
+
+.qr-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.display-steps {
+  padding-left: 24px;
+  max-width: 60ch;
+}
+
+.display-steps li {
+  font-size: clamp(1rem, 1.1vw, 1.22rem);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.display-right {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.display-background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Large displays / TVs */
+@media (min-width: 1600px) {
+  .display-layout {
+    grid-template-columns: minmax(540px, 0.9fr) 1.1fr;
+  }
+
+  .glass-panel {
+    width: min(100%, 860px);
+  }
+}
+
+/* Laptop / smaller desktop */
+@media (max-width: 1200px) {
+  .display-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .glass-panel {
+    width: min(100%, 680px);
+  }
+}
+
+/* Tablet / stacked layout */
+@media (max-width: 900px) {
+  .display-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .display-left {
+    min-height: auto;
+    padding: 24px 18px;
+  }
+
+  .glass-panel {
+    width: 100%;
+  }
+
+  .display-right {
+    min-height: 320px;
+  }
+
+  .display-title {
+    max-width: none;
   }
 }
