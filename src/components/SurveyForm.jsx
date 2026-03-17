@@ -1,41 +1,71 @@
 import { useState } from "react";
 
-const questions = [
+const surveySteps = [
   {
-    id: "role_or_company",
-    label: "Your role or company",
-    placeholder: "Enter your role or company",
+    id: "about",
+    type: "details",
+    title: "About you",
+    fields: [
+      {
+        id: "name",
+        label: "Name",
+        placeholder: "Enter your name",
+        required: true,
+      },
+      {
+        id: "role",
+        label: "Role",
+        placeholder: "Enter your role",
+        required: true,
+      },
+      {
+        id: "organisation",
+        label: "Organisation",
+        placeholder: "Enter your organisation",
+        required: true,
+      },
+    ],
   },
   {
-    id: "answer_1",
+    id: "q1",
+    type: "question",
+    answerField: "answer_1",
     questionField: "question_1",
     questionText: "What excites you most about technology right now?",
     label: "1. What excites you most about technology right now?",
     placeholder: "Type your answer here...",
   },
   {
-    id: "answer_2",
+    id: "q2",
+    type: "question",
+    answerField: "answer_2",
     questionField: "question_2",
     questionText: "What technology trend is overhyped?",
     label: "2. What technology trend is overhyped?",
     placeholder: "Type your answer here...",
   },
   {
-    id: "answer_3",
+    id: "q3",
+    type: "question",
+    answerField: "answer_3",
     questionField: "question_3",
     questionText: "What leadership lesson took you the longest to learn?",
     label: "3. What leadership lesson took you the longest to learn?",
     placeholder: "Type your answer here...",
   },
   {
-    id: "answer_4",
+    id: "q4",
+    type: "question",
+    answerField: "answer_4",
     questionField: "question_4",
     questionText: "What one capability must banks master in the next decade?",
     label: "4. What one capability must banks master in the next decade?",
     placeholder: "Type your answer here...",
   },
   {
-    id: "answer_5",
+    id: "q5",
+    type: "question",
+    answerField: "answer_5",
     questionField: "question_5",
     questionText: "What advice would you give your younger self entering tech?",
     label: "5. What advice would you give your younger self entering tech?",
@@ -52,7 +82,9 @@ export default function SurveyForm({ finishSurvey, setSurveyProgress }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [answers, setAnswers] = useState({
-    role_or_company: "",
+    name: "",
+    role: "",
+    organisation: "",
     answer_1: "",
     answer_2: "",
     answer_3: "",
@@ -60,21 +92,35 @@ export default function SurveyForm({ finishSurvey, setSurveyProgress }) {
     answer_5: "",
   });
 
-  const currentQuestion = questions[step];
-  const isLastStep = step === questions.length - 1;
+  const currentStep = surveySteps[step];
+  const isLastStep = step === surveySteps.length - 1;
 
   const handleChange = (event) => {
+    const { name, value } = event.target;
+
     setAnswers((currentAnswers) => ({
       ...currentAnswers,
-      [currentQuestion.id]: event.target.value,
+      [name]: value,
     }));
   };
 
+  const detailsStepIsValid = () => {
+    return (
+      answers.name.trim() !== "" &&
+      answers.role.trim() !== "" &&
+      answers.organisation.trim() !== ""
+    );
+  };
+
+  const canContinue =
+    currentStep.type === "details" ? detailsStepIsValid() : true;
+
   const handleNext = () => {
+    if (!canContinue) return;
+
     const nextStep = step + 1;
     setStep(nextStep);
-    const progressValue = Math.round(((nextStep + 1) / questions.length) * 100);
-    setSurveyProgress(progressValue);
+    setSurveyProgress(Math.round(((nextStep + 1) / surveySteps.length) * 100));
   };
 
   const handleBack = () => {
@@ -82,10 +128,9 @@ export default function SurveyForm({ finishSurvey, setSurveyProgress }) {
 
     const previousStep = step - 1;
     setStep(previousStep);
-    const progressValue = Math.round(
-      ((previousStep + 1) / questions.length) * 100
+    setSurveyProgress(
+      Math.round(((previousStep + 1) / surveySteps.length) * 100)
     );
-    setSurveyProgress(progressValue);
   };
 
   const handleSubmit = async (event) => {
@@ -98,18 +143,18 @@ export default function SurveyForm({ finishSurvey, setSurveyProgress }) {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: encode({
           "form-name": "to-talks-survey",
-          role_or_company: answers.role_or_company,
-          question_1: "What excites you most about technology right now?",
+          name: answers.name,
+          role: answers.role,
+          organisation: answers.organisation,
+          question_1: surveySteps[1].questionText,
           answer_1: answers.answer_1,
-          question_2: "What technology trend is overhyped?",
+          question_2: surveySteps[2].questionText,
           answer_2: answers.answer_2,
-          question_3: "What leadership lesson took you the longest to learn?",
+          question_3: surveySteps[3].questionText,
           answer_3: answers.answer_3,
-          question_4:
-            "What one capability must banks master in the next decade?",
+          question_4: surveySteps[4].questionText,
           answer_4: answers.answer_4,
-          question_5:
-            "What advice would you give your younger self entering tech?",
+          question_5: surveySteps[5].questionText,
           answer_5: answers.answer_5,
         }),
       });
@@ -128,9 +173,11 @@ export default function SurveyForm({ finishSurvey, setSurveyProgress }) {
     <div className="container">
       <div className="step-meta">
         <span className="step-counter">
-          Question {step + 1} of {questions.length}
+          Step {step + 1} of {surveySteps.length}
         </span>
-        <span className="step-optional">Optional</span>
+        <span className="step-optional">
+          {currentStep.type === "details" ? "Required" : "Optional"}
+        </span>
       </div>
 
       <h1 className="title">T&amp;O Talks Survey</h1>
@@ -147,27 +194,53 @@ export default function SurveyForm({ finishSurvey, setSurveyProgress }) {
       >
         <input type="hidden" name="form-name" value="to-talks-survey" />
 
-        {currentQuestion.questionField && (
-          <input
-            type="hidden"
-            name={currentQuestion.questionField}
-            value={currentQuestion.questionText}
-          />
+        {currentStep.type === "details" && (
+          <>
+            <h2 className="question-label">{currentStep.title}</h2>
+
+            {currentStep.fields.map((field) => (
+              <div key={field.id} className="details-field">
+                <label className="field-label" htmlFor={field.id}>
+                  {field.label}
+                </label>
+                <input
+                  id={field.id}
+                  name={field.id}
+                  type="text"
+                  className="input"
+                  placeholder={field.placeholder}
+                  value={answers[field.id]}
+                  onChange={handleChange}
+                  required={field.required}
+                />
+              </div>
+            ))}
+          </>
         )}
 
-        <label className="question-label" htmlFor={currentQuestion.id}>
-          {currentQuestion.label}
-        </label>
+        {currentStep.type === "question" && (
+          <>
+            <input
+              type="hidden"
+              name={currentStep.questionField}
+              value={currentStep.questionText}
+            />
 
-        <textarea
-          id={currentQuestion.id}
-          name={currentQuestion.id}
-          className="input textarea"
-          placeholder={currentQuestion.placeholder}
-          value={answers[currentQuestion.id]}
-          onChange={handleChange}
-          rows="6"
-        />
+            <label className="question-label" htmlFor={currentStep.id}>
+              {currentStep.label}
+            </label>
+
+            <textarea
+              id={currentStep.id}
+              name={currentStep.answerField}
+              className="input textarea"
+              placeholder={currentStep.placeholder}
+              value={answers[currentStep.answerField]}
+              onChange={handleChange}
+              rows="6"
+            />
+          </>
+        )}
 
         <div className="button-row">
           <button
@@ -184,13 +257,13 @@ export default function SurveyForm({ finishSurvey, setSurveyProgress }) {
               type="button"
               className="button"
               onClick={handleNext}
-              disabled={isSubmitting}
+              disabled={!canContinue || isSubmitting}
             >
               Next
             </button>
           ) : (
             <button type="submit" className="button" disabled={isSubmitting}>
-              {isSubmitting ? "Submitting..." : "Submit"}
+              {isSubmitting ? "Submitting..." : "Submit Survey"}
             </button>
           )}
         </div>
